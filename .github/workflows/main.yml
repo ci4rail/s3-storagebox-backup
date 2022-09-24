@@ -1,0 +1,12 @@
+on:
+  workflow_dispatch:
+    branches:
+      - "main"
+      - "initial"
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          pip install s3cmd
