@@ -1,8 +1,5 @@
 on:
   workflow_dispatch:
-    branches:
-      - "main"
-      - "initial"
 
   push:
     branches:
@@ -15,3 +12,4 @@ jobs:
     steps:
       - run: |
           pip install s3cmd
+          s3cmd --help
