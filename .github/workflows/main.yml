@@ -4,6 +4,11 @@ on:
       - "main"
       - "initial"
 
+  push:
+    branches:
+      - "main"
+      - "initial"
+
 jobs:
   backup:
     runs-on: ubuntu-latest
