@@ -19,8 +19,8 @@ jobs:
           bucket_location = eu-central-1
           use_https = True
 
-          access_key = {{ secrets.MINIO_ACCESS_KEY}}
-          secret_key = {{ secrets.MINIO_SECRET_KEY}}
+          access_key = ${{ secrets.MINIO_ACCESS_KEY }}
+          secret_key = ${{ secrets.MINIO_SECRET_KEY }}
 
           signature_v2 = False
           EOF
