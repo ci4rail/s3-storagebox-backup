@@ -26,6 +26,7 @@ jobs:
           EOF
 
           cat ~/.s3cfg
+          s3cmd ls
 
         env:
           S3HOST: "minio.ci4rail.com"
