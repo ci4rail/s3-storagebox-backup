@@ -12,4 +12,11 @@ jobs:
     steps:
       - run: |
           pip install s3cmd
-          s3cmd --help
+
+          cat << EOF
+          host_base = $S3HOST
+          EOF > ~/.s3cfg
+          cat ~/.s3cfg
+
+        env:
+          S3HOST: "minio.ci4rail.com"
