@@ -13,9 +13,10 @@ jobs:
       - run: |
           pip install s3cmd
 
-          cat << EOF
+          cat << EOF > ~/.s3cfg
           host_base = $S3HOST
-          EOF > ~/.s3cfg
+          EOF
+          
           cat ~/.s3cfg
 
         env:
