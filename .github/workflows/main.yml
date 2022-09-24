@@ -15,8 +15,16 @@ jobs:
 
           cat << EOF > ~/.s3cfg
           host_base = $S3HOST
+          host_bucket = $S3HOST
+          bucket_location = eu-central-1
+          use_https = True
+
+          access_key = {{ secrets.MINIO_ACCESS_KEY}}
+          secret_key = {{ secrets.MINIO_SECRET_KEY}}
+
+          signature_v2 = False
           EOF
-          
+
           cat ~/.s3cfg
 
         env:
