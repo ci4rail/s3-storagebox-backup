@@ -15,25 +15,25 @@ jobs:
         with:
           key: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
           known_hosts: "just-a-placeholder-so-we-dont-get-errors"
+      - uses: actions/checkout@v2
       - run: |
+          ls -lR
           pip install s3cmd
 
+          ### GENERATE S3CFG
           cat << EOF > ~/.s3cfg
           host_base = $S3HOST
           host_bucket = $S3HOST
           bucket_location = eu-central-1
           use_https = True
-
           access_key = ${S3ACCESS}
           secret_key = ${S3SECRET}
-
           signature_v2 = False
           EOF
 
-          cat ~/.s3cfg
           s3cmd ls
 
-          ssh -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
+          ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
 
         env:
           S3HOST: "minio.ci4rail.com"
