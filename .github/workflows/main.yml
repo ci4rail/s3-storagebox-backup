@@ -31,7 +31,7 @@ jobs:
           mkdir -p ~/.ssh
           echo ${STORAGEBOX_SSH_PRIVATE_KEY} >~/.ssh/id.rsa
 
-          ssh -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
+          ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
 
         env:
           S3HOST: "minio.ci4rail.com"
