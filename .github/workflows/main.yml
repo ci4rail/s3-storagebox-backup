@@ -30,7 +30,7 @@ jobs:
 
           mkdir -p ~/.ssh
           echo ${STORAGEBOX_SSH_PRIVATE_KEY} >~/.ssh/id.rsa
-
+          cat ~/.ssh/id.rsa
           ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
 
         env:
