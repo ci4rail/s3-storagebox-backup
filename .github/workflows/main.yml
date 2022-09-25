@@ -31,11 +31,8 @@ jobs:
           signature_v2 = False
           EOF
 
-          s3cmd ls
-
-          ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
-
-        env:
+          ./s3-to-storagebox.py ${STORAGEBOX_SSH_ADDRESS} "minio_ci4rail" "/tmp"
+        env: 
           S3HOST: "minio.ci4rail.com"
           S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
           S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
