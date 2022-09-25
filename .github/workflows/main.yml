@@ -10,6 +10,11 @@ jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
+          known_hosts: "just-a-placeholder-so-we-dont-get-errors"
       - run: |
           pip install s3cmd
 
@@ -28,14 +33,10 @@ jobs:
           cat ~/.s3cfg
           s3cmd ls
 
-          mkdir -p ~/.ssh
-          echo ${STORAGEBOX_SSH_PRIVATE_KEY} >~/.ssh/id.rsa
-          cat ~/.ssh/id.rsa
           ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
 
         env:
           S3HOST: "minio.ci4rail.com"
           S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
           S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
-          STORAGEBOX_SSH_PRIVATE_KEY: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
           STORAGEBOX_SSH_ADDRESS: "u316870@u316870.your-storagebox.de"
