@@ -30,7 +30,7 @@ def storagebox_cp(file_name, temp_dir, dest_dir):
     """
     Copy a file from local disk to storage box
     """
-    print("Copying %s to storage box" % file_name)
+    print(f"Copying {temp_dir}/{file_name} to storage box")
     completion = run(["scp", "-o", "StrictHostKeyChecking=no", "-P23", f"{temp_dir}/{file_name}", f"{STORAGEBOX}:{dest_dir}/{file_name}"], stdout=PIPE)
     if completion.returncode != 0:
         raise RuntimeError("scp failed with exit code %d" % (completion.returncode))
@@ -63,7 +63,7 @@ def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
         while True:
             try:
                 print("try %d" % tries)
-                run_s3cmd(["get", f"s3://{file_name}", temp_dir])
+                run_s3cmd(["get", f"s3://{temp_dir}/{file_name}" ])
                 print("s3cmd ok")
                 storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
                 print("mkdir ok")
