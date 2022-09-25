@@ -30,7 +30,6 @@ def storagebox_cp(file_name, temp_dir, dest_dir):
     """
     Copy a file from local disk to storage box
     """
-    print(f"Copying {temp_dir}/{file_name} to storage box")
     completion = run(["scp", "-o", "StrictHostKeyChecking=no", "-P23", f"{temp_dir}/{file_name}", f"{STORAGEBOX}:{dest_dir}/{file_name}"], stdout=PIPE)
     if completion.returncode != 0:
         raise RuntimeError("scp failed with exit code %d" % (completion.returncode))

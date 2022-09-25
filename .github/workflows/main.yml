@@ -1,18 +1,5 @@
 on:
   workflow_dispatch:
-    inputs:
-      choice:
-        required: true
-        type: choice
-        description: Make a choice
-        options:
-        - foo
-        - bar
-        - baz
-  push:
-    branches:
-      - "main"
-      - "initial"
 
   schedule:
     # run on monday wednesday, 1 am
@@ -50,3 +37,4 @@ jobs:
           S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
           S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
           STORAGEBOX_SSH_ADDRESS: "u316870@u316870.your-storagebox.de"
+
