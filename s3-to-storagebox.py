@@ -11,6 +11,7 @@ A tool to backup an S3 server to a hetzner storage box
 """
 
 def run_s3cmd(args):
+    print("Running s3cmd %s" % " ".join(args))
     process = Popen([S3CMD] + args, stdout=PIPE)
     (output, err) = process.communicate()
     exit_code = process.wait()
