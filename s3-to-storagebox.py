@@ -14,7 +14,9 @@ def run_s3cmd(args):
     process = Popen([S3CMD] + args, stdout=PIPE)
     (output, err) = process.communicate()
     exit_code = process.wait()
-    return output, err, exit_code
+    if exit_code != 0:
+        raise RuntimeError("s3cmd failed with exit code %d: %s" % (exit_code, err))
+    return output, err
 
 def storagebox_mkdir(path):
     """
@@ -40,9 +42,7 @@ def s3_listall():
     Returns:
         list of files without leading s3://. Dirs are not listed
     """
-    output, err, exit_code = run_s3cmd(["la"])
-    if exit_code != 0:
-        raise RuntimeError("s3cmd failed with exit code %d: %s" % (exit_code, err))
+    output, _ = run_s3cmd(["la"])
 
     files = []
     for line in output.decode("utf-8").splitlines():
@@ -55,21 +55,34 @@ def s3_listall():
         files.append(file_name)
     return files
 
+def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
+    print("Copying %s" % file_name)
+
+    tries = 0 
+    try:
+        while True:
+            try:
+                run_s3cmd(["get", f"s3://{file_name}", temp_dir])
+                storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
+                storagebox_cp(file_name, temp_dir, dest_dir)
+                break
+            except Exception as e:
+                print("Error: %s, retrying" % e)
+                tries += 1
+                if tries > 5:
+                    raise RuntimeError("Too many retries")
+
+    finally:
+        os.remove(f"{temp_dir}/{file_name}")
+
+
 def s3_to_storage_box(files, temp_dir, dest_dir):
     """
-    Copy files from s3 to local disk and then to storage box. Overwrite existing files.
+    Copy files from s3 to local disk and then to storage box.
     """
     for file_name in files:
-        print("Copying %s" % file_name)
-        output, err, exit_code = run_s3cmd(["--force", "get", "s3://%s" % file_name, f"{temp_dir}/{file_name}"])
-        if exit_code != 0:
-            raise RuntimeError("s3cmd failed with exit code %d: %s" % (exit_code, err))
-        try:
-            dir = os.path.dirname(file_name)
-            storagebox_mkdir(f"{dest_dir}/{dir}")
-            storagebox_cp(file_name, temp_dir, dest_dir)
-        finally:
-            os.remove(f"{temp_dir}/{file_name}")
+        s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir)
+
 
 def command_line_args_parsing():
     parser = argparse.ArgumentParser(description=tool_description)
