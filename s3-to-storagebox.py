@@ -11,7 +11,6 @@ A tool to backup an S3 server to a hetzner storage box
 """
 
 def run_s3cmd(args):
-    print("Running s3cmd %s" % " ".join(args))
     process = Popen([S3CMD] + args, stdout=PIPE)
     (output, err) = process.communicate()
     exit_code = process.wait()
@@ -63,7 +62,7 @@ def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
     try:
         while True:
             try:
-                run_s3cmd(["get", f"s3://{file_name}", f"{temp_dir}/{file_name}"])
+                run_s3cmd(["get", "--force", f"s3://{file_name}", f"{temp_dir}/{file_name}"])
                 storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
                 storagebox_cp(file_name, temp_dir, dest_dir)
                 break
