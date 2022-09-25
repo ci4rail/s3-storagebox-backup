@@ -33,7 +33,7 @@ jobs:
           cat ~/.s3cfg
           s3cmd ls
 
-          ssh -o StrictHostKeyChecking=no -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
+          ssh -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
 
         env:
           S3HOST: "minio.ci4rail.com"
