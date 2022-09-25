@@ -19,8 +19,8 @@ jobs:
           bucket_location = eu-central-1
           use_https = True
 
-          access_key = ${{ secrets.MINIO_ACCESS_KEY }}
-          secret_key = ${{ secrets.MINIO_SECRET_KEY }}
+          access_key = ${S3ACCESS}
+          secret_key = ${S3SECRET}
 
           signature_v2 = False
           EOF
@@ -28,5 +28,14 @@ jobs:
           cat ~/.s3cfg
           s3cmd ls
 
+          mkdir -p ~/.ssh
+          echo ${STORAGEBOX_SSH_PRIVATE_KEY} >~/.ssh/id.rsa
+
+          ssh -p 23 ${STORAGEBOX_SSH_ADDRESS} ls
+
         env:
           S3HOST: "minio.ci4rail.com"
+          S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
+          S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
+          STORAGEBOX_SSH_PRIVATE_KEY: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
+          STORAGEBOX_SSH_ADDRESS: "u316870@u316870.your-storagebox.de"
