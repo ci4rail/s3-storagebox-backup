@@ -63,13 +63,9 @@ def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
     try:
         while True:
             try:
-                print("try %d" % tries)
                 run_s3cmd(["get", f"s3://{file_name}", f"{temp_dir}/{file_name}"])
-                print("s3cmd ok")
                 storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
-                print("mkdir ok")
                 storagebox_cp(file_name, temp_dir, dest_dir)
-                print("cp ok")
                 break
             except Exception as e:
                 print("Error: %s, retrying" % e)
@@ -85,9 +81,15 @@ def s3_to_storage_box(files, temp_dir, dest_dir):
     """
     Copy files from s3 to local disk and then to storage box.
     """
+    failed_files = []
     for file_name in files:
-        s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir)
+        try:
+            s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir)
+        except Exception as e:
+            print("Error: %s" % e)
+            failed_files.append(file_name)
 
+    print("Failed files: %s" % failed_files)
 
 def command_line_args_parsing():
     parser = argparse.ArgumentParser(description=tool_description)
