@@ -62,9 +62,13 @@ def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
     try:
         while True:
             try:
+                print("try %d" % tries)
                 run_s3cmd(["get", f"s3://{file_name}", temp_dir])
+                print("s3cmd ok")
                 storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
+                print("mkdir ok")
                 storagebox_cp(file_name, temp_dir, dest_dir)
+                print("cp ok")
                 break
             except Exception as e:
                 print("Error: %s, retrying" % e)
