@@ -63,7 +63,7 @@ def s3_to_storage_box_copy_file(file_name, temp_dir, dest_dir):
         while True:
             try:
                 print("try %d" % tries)
-                run_s3cmd(["get", f"s3://{temp_dir}/{file_name}" ])
+                run_s3cmd(["get", f"s3://{file_name}", temp_dir ])
                 print("s3cmd ok")
                 storagebox_mkdir(os.path.dirname(f"{dest_dir}/{file_name}"))
                 print("mkdir ok")
