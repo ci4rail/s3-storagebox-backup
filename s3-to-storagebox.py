@@ -11,7 +11,7 @@ A tool to backup an S3 server to a hetzner storage box
 """
 
 def run_s3cmd(args):
-    process = Popen([S3CMD, "--config", "/etc/s3cfg_ci4rail_minio"] + args, stdout=PIPE)
+    process = Popen([S3CMD] + args, stdout=PIPE)
     (output, err) = process.communicate()
     exit_code = process.wait()
     return output, err, exit_code
