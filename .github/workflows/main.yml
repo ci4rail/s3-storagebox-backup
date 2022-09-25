@@ -8,17 +8,14 @@ on:
 
 jobs:
   backup:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, yocto-runner]
     steps:
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
-          known_hosts: "just-a-placeholder-so-we-dont-get-errors"
-      - uses: actions/checkout@v2
-      - name: Do backup
+      - name: Install Python
         run: |
-          pip install s3cmd
+          apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+          python3 -m ensurepip
+          pip3 install --no-cache --upgrade pip setuptools
+          pip3 install s3cmd
 
           ### GENERATE S3CFG
           cat << EOF > ~/.s3cfg
@@ -30,6 +27,15 @@ jobs:
           secret_key = ${S3SECRET}
           signature_v2 = False
           EOF
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
+          known_hosts: "just-a-placeholder-so-we-dont-get-errors"
+      - uses: actions/checkout@v2
+      - name: Do backup
+        run: |
 
           ./s3-to-storagebox.py ${STORAGEBOX_SSH_ADDRESS} "minio_ci4rail" "/tmp"
         env:
