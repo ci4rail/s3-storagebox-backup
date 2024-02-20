@@ -12,7 +12,7 @@ jobs:
       - name: Install s3cmd
         run: |
           pip3 install s3cmd
-          s3cmd
+          echo $PATH
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
@@ -31,7 +31,7 @@ jobs:
           secret_key = ${S3SECRET}
           signature_v2 = False
           EOF
-          which s3cmd
+          export PATH=~/.local/bin:$PATH
           ./s3-to-storagebox.py ${STORAGEBOX_SSH_ADDRESS} "minio_ci4rail" "/tmp"
         env:
           S3HOST: "minio.ci4rail.com"
