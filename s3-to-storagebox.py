@@ -41,7 +41,7 @@ def s3_listall():
     Returns:
         list of files without leading s3://. Dirs are not listed
     """
-    output, _ = run_s3cmd(["la"])
+    output, _ = run_s3cmd(["la", "--recursive"])
 
     files = []
     for line in output.decode("utf-8").splitlines():
@@ -110,6 +110,7 @@ def main():
 
     print("Starting backup")
     files = s3_listall()
+    #print(files)
     s3_to_storage_box(files, args.temp_dir, args.dest_dir)
 
 if __name__ == "__main__":
