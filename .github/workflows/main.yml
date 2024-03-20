@@ -16,7 +16,7 @@ jobs:
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.U316870_STORAGE_BOX_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.STORAGE_BOX_SSH_PRIVATE_KEY }}
           known_hosts: "just-a-placeholder-so-we-dont-get-errors"
       - uses: actions/checkout@v4
       - name: Do backup
@@ -37,5 +37,6 @@ jobs:
           S3HOST: "minio.ci4rail.com"
           S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
           S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
-          STORAGEBOX_SSH_ADDRESS: "u316870@u316870.your-storagebox.de"
+          STORAGEBOX_SSH_ADDRESS: "u396962@u396962.your-storagebox.de
+"
 
