@@ -9,6 +9,10 @@ jobs:
   backup:
     runs-on: [self-hosted, linux, x64, yocto-runner]
     steps:
+      - name: Install SSH Client
+        run: |
+          sudo apt-get update
+          sudo apt install -y openssh-client
       - name: Install s3cmd
         run: |
           pip3 install s3cmd
@@ -37,6 +41,4 @@ jobs:
           S3HOST: "minio.ci4rail.com"
           S3ACCESS: ${{ secrets.MINIO_ACCESS_KEY }}
           S3SECRET: ${{ secrets.MINIO_SECRET_KEY }}
-          STORAGEBOX_SSH_ADDRESS: "u396962@u396962.your-storagebox.de
-"
-
+          STORAGEBOX_SSH_ADDRESS: "u396962@u396962.your-storagebox.de"
